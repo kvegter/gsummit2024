@@ -389,4 +389,4 @@ What POIs are along a route?
 
 Now open neodash in the browser in a new tab with this url https://neodash.graphapp.io/.
 
-After that follow the instructions on Question_1.md in the [model questions directory](/dashboards/model-questions/Question%201.md).
+After that follow the instructions on [Question_1.md](/dashboards/model-questions/Question%201.md).
