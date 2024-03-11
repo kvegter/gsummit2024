@@ -9,9 +9,11 @@
 //
 // WARNING! 
 // This erases your database contents
-//
-MATCH (n)
-DETACH DELETE n;
+// apoc periodic commit will execute the statement until the count is 0
+// this is done to limit the transaction size to make it also work on AuraDB Free.
+
+call apoc.periodic.commit('MATCH (n) with n limit $limit DETACH DELETE n return count(n)'
+, {limit: 10000});
 
 // 
 // WARNING! 
