@@ -78,11 +78,11 @@ The following high level steps are required, to build the demo environment:
     3. [Neo4j Desktop](https://neo4j.com/download-center/)
         - If you are using Neo4j Desktop, you will need to ensure that APOC are added to any graph you create. Installation instructions can be found [here](https://neo4j.com/docs/desktop-manual/current/).
 
-2. Open Neo4j Browser and run the [`load-all-data.cypher`](https://raw.githubusercontent.com/cskardon/gsummit2023/main/cypher/load-all-data.cypher) script from the code directory above. You can copy & paste the complete code into the Neo4j Browser query window.
+2. Open Neo4j Browser and run the [`load-all-data.cypher`](https://raw.githubusercontent.com/kvegter/gsummit2024/main/cypher/load-all-data.cypher) script from the code directory above. You can copy & paste the complete code into the Neo4j Browser query window.
 
 3. After the script has finished loading, you can check your data model. Run the command `CALL apoc.meta.subGraph({labels:['OperationalPoint', 'OperationalPointName', 'POI']})` in your Browser query window. It should look like the following (maybe yours is a bit more mixed up):
 
-<img width="800" alt="Data Model - Digital Twin" src="https://raw.githubusercontent.com/cskardon/gsummit2023/main/images/Model.svg">
+<img width="800" alt="Data Model - Digital Twin" src="https://raw.githubusercontent.com/kvegter/gsummit2024/main/images/Model.svg">
 
 The model shows that we have an `OperationalPoint` Node that is connected to itself with a `SECTION` relationship. This means, `OperationalPoint`s are connected together and make up the rail network .
 
@@ -91,7 +91,7 @@ The model shows that we have an `OperationalPoint` Node that is connected to its
 ---
 ## Run some Cypher queries on your Graph 
 
-> You can find a copy of these queries in the [`all_queries.cypher`](https://raw.githubusercontent.com/cskardon/gsummit2023/main/cypher/all_queries.cypher) file. 
+> You can find a copy of these queries in the [`all_queries.cypher`](https://raw.githubusercontent.com/kvegter/gsummit2024/main/cypher/all_queries.cypher) file. 
 >
 > For the workshop we will be running through the contents of this readme.
 
@@ -263,7 +263,7 @@ LIMIT 1
 
 We get no results, as there is no way in our current data set to get from the UK to France or indeed Denmark to Germany.
 
-This is a good example of **'Knowing your Domain'**, and investigating your dataset for problems from the context of your knowledge. For example, a domain expert might know you _can_ get a train from Stockholm to Berlin, but querying it gets no results:
+This is a good example of **'Knowing your Domain'**, and investigating your dataset for problems from the context of your knowledge. For example, a domain expert might know you _can_ get a train from Stockholm to Berlin, but querying it gets **no** results:
 
 ```cypher
 MATCH 
@@ -338,21 +338,36 @@ WHERE
 SET r.traveltime = (r.sectionlength / r.speed) * 60 * 60
 ```
 
-> **IMPORTANT** To be able to use the [NeoDash dashboard](https://raw.githubusercontent.com/cskardon/gsummit2023/main/dashboards/digital-twin_dashboard.json) in this repository fully, you will need to execute this query.
+Since there are some sections without a speed information, we will add a speed to it and calculate travel time. That will enable us, to calculate time vs. speed later in NeoDash.
+
+> **IMPORTANT** To be able to use the [NeoDash dashboard](https://raw.githubusercontent.com/kvegter/gsummit2024/main/dashboards/digital-twin_dashboard.json) in this repository fully, you will need to execute these queries.
+
+
+```cypher
+MATCH ()-[s:SECTION]->()
+WHERE s.speed is null
+SET s.speed = toFloat(11)
+RETURN count(*);
+```
+
+```cypher
+MATCH ()-[s:SECTION]->()
+SET s.traveltime = s.sectionlength/(s.speed/3600);
+```
 
 ## Shortest Path Queries using different Shortest Path functions in Neo4j
 
-In these queries, we're going to look at finding the Shortest Path from Brussels to Berlin. 
+In these queries, we're going to look at finding the Shortest Path from Amsterdam to Berlin. 
 
 This query will find the shortest number of hops between `OperationalPoint`s, irregardless of the distance that would be travelled.
 
 ```cypher
 // Cypher shortest path
 MATCH 
-    (:OperationalPointName {name:'Stockholms central'})<-[:NAMED]-(stockholm:OperationalPoint),
-    (:OperationalPointName {name:'Malmö central'})<-[:NAMED]-(malmo:OperationalPoint)
-WITH stockholm, malmo
-MATCH path = shortestPath ( (malmo)-[:SECTION*]-(stockholm) )
+    (:OperationalPointName {name:'Amsterdam Centraal'})<-[:NAMED]-(amsterdam:OperationalPoint),
+    (:OperationalPointName {name:'Berlin Hauptbahnhof - Lehrter Bahnhof'})<-[:NAMED]-(berlin:OperationalPoint)
+WITH amsterdam, berlin
+MATCH path = shortestPath ( (amsterdam)-[:SECTION*]-(berlin) )
 RETURN path
 ```
 
@@ -361,4 +376,17 @@ RETURN path
 
 ## Building your Graph Dashboard with NeoDash
 
-```
+Remember our Business Questions
+
+What is the route from Operational Point X to Operational Point Y?
+- What’s the quickest way to get a repair crew from Technical Services to a given Switch?
+What is an alternative route if an Operational Point on a route is closed?
+- A Switch is broken and we need to reroute Trains
+How many routes are affected if I need to upgrade an Operational Point?
+- A Switch needs to be upgraded to support the network
+What POIs are along a route?
+- Can we make revenue from referral commissions? Find busier routes during tourism season?
+
+Now open neodash in the browser in a new tab with this url https://neodash.graphapp.io/.
+
+After that follow the instructions on [`Question_1.md`](https://raw.githubusercontent.com/kvegter/gsummit2024/main/dashboards/model-questions/Question%201.md) in the dashboards directory

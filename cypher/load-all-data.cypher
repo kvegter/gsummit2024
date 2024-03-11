@@ -32,7 +32,23 @@ CREATE INDEX index_OperationalPointName_name IF NOT EXISTS FOR (opn:OperationalP
 //
 // Loading Operational Points
 //
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/kvegter/gsummit2024/main/data/OperationalPoint_All.csv" AS row
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/kvegter/gsummit2024/main/data/OperationalPoint_1.csv" AS row
+//This WITH is to ensure our data is as normalized as we can
+WITH
+    trim(row.id) AS id, //trim will remove and start and trailing spaces from an ID
+    toFloat(row.latitude) AS latitude, //toFloat will 
+    toFloat(row.longitude) AS longitude,
+    trim(row.name) AS name,
+    [] + trim(row.country) + trim(row.extralabel) AS labels,
+    trim(row.country) AS country
+MERGE (op:OperationalPoint {id: id})
+SET
+    op.geolocation = Point({latitude: latitude, longitude: longitude})
+WITH op, labels, name, country
+CALL apoc.create.addLabels( op, labels ) YIELD node
+CREATE (node)-[:NAMED {country: country}]->(:OperationalPointName {name: name});
+
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/kvegter/gsummit2024/main/data/OperationalPoint_2.csv" AS row
 //This WITH is to ensure our data is as normalized as we can
 WITH
     trim(row.id) AS id, //trim will remove and start and trailing spaces from an ID
