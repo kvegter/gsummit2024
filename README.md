@@ -387,7 +387,7 @@ How many routes are affected if I need to upgrade an Operational Point?
 What POIs are along a route?
 - Can we make revenue from referral commissions? Find busier routes during tourism season?
 
-Now open neodash in the browser in a new tab with this url https://neodash.graphapp.io/. When you use AuraDB Free or the Neo4j Sandbox. Use http://neodash.graphapp.io/ when you have a Database running in the Neo4j Desktop.
+Now open neodash in the browser in a new tab. When you use AuraDB Free or the Neo4j Sandbox with  https://neodash.graphapp.io/ . When you have a database running in the Neo4j Desktop use http://neodash.graphapp.io/ .
 
 Connect to your Neo4j Instance.
 
