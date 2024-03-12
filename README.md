@@ -78,7 +78,7 @@ The following high level steps are required, to build the demo environment:
     3. [Neo4j Desktop](https://neo4j.com/download-center/)
         - If you are using Neo4j Desktop, you will need to ensure that APOC are added to any graph you create. Installation instructions can be found [here](https://neo4j.com/docs/desktop-manual/current/).
 
-2. Open Neo4j Browser and run the [`load-all-data.cypher`](https://raw.githubusercontent.com/kvegter/gsummit2024/main/cypher/load-all-data.cypher) script from the code directory above. You can copy & paste the complete code into the Neo4j Browser query window.
+2. Open Neo4j Browser and run the [`load-all-data.cypher`](https://raw.githubusercontent.com/kvegter/gsummit2024/main/cypher/load-all-data.cypher) script from the code directory above. You can copy & paste the complete code into the Neo4j Browser query window. **Note this script will clear any existing data in the database first!**
 
 3. After the script has finished loading, you can check your data model. Run the command `CALL apoc.meta.subGraph({labels:['OperationalPoint', 'OperationalPointName', 'POI']})` in your Browser query window. It should look like the following (maybe yours is a bit more mixed up):
 
