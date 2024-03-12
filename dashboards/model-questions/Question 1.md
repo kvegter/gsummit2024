@@ -116,4 +116,4 @@ Now when this is saved you should see a map output of the results.
 <img alt="Picture showing the Map view" src="https://raw.githubusercontent.com/cskardon/gsummit2023/main/images/dashboard/question1/Question1_MapView.png">
 
 
-When you have time left over go to [Question_2.md](/dashboards/model-questions/Question%201.md). To specify stations to avois and using Quantified Path Patterns.
+When you have time left over go to [Question_2.md](/dashboards/model-questions/Question%202.md). To specify stations to avois and using Quantified Path Patterns.
