@@ -72,7 +72,7 @@ POIs have the following properties:
 The following high level steps are required, to build the demo environment:
 
 1. Create a Neo4j Graph instance via any of:
-    1. [Neo4j Aura] (https://console.neo4j.io/)
+    1. [Neo4j Aura](https://console.neo4j.io/)
        - You can spin up a Free aura instance here. If you already have one Aura Free db in use and don't want to clear it can use the following option for this workshop
     2. [Neo4j Sandbox](https://sandbox.neo4j.com/) use a "Blank Sandbox"
     3. [Neo4j Desktop](https://neo4j.com/download-center/)
