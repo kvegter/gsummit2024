@@ -270,7 +270,7 @@ MATCH
     (:OperationalPointName {name:'Stockholms central'})<-[:NAMED]-(stockholm:OperationalPoint),
     (:OperationalPointName {name:'Berlin Hauptbahnhof - Lehrter Bahnhof'})<-[:NAMED]-(berlin:OperationalPoint)
 WITH stockholm, berlin
-MATCH p= ((stockholm)-[:SECTION]-(berlin))
+MATCH p= ((stockholm)-[:SECTION*]-(berlin))
 RETURN p 
 LIMIT 1
 ```
