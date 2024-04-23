@@ -75,7 +75,7 @@ MATCH
     (:OperationalPointName {name:'Stockholms central'})<-[:NAMED]-(stockholm:OperationalPoint),
     (:OperationalPointName {name:'Berlin Hauptbahnhof - Lehrter Bahnhof'})<-[:NAMED]-(berlin:OperationalPoint)
 WITH stockholm, berlin
-MATCH p= ((stockholm)-[:SECTION]-(berlin))
+MATCH p= shortestPath((stockholm)-[:SECTION*]-(berlin))
 RETURN p 
 LIMIT 1
 
@@ -92,7 +92,7 @@ MERGE (germany)-[:SECTION {sectionlength: distance/1000.0, curated: true}]->(den
 // Nyborg / Hjulby Gap
 MATCH 
     (:OperationalPointName {name: 'Nyborg'})<-[:NAMED]-(nyborg:OperationalPoint),
-    (:OperationalPointName {name: 'Hjulby'})<-[:NAMED]-(hjulby:OperationalPoint)-[:NAMED]->
+    (:OperationalPointName {name: 'Hjulby'})<-[:NAMED]-(hjulby:OperationalPoint)
 MERGE (nyborg)-[:SECTION {sectionlength: point.distance(nyborg.geolocation, hjulby.geolocation)/1000.0, curated: true}]->(hjulby);
 
 //UK / France Border Gap
